@@ -1,0 +1,424 @@
+<html>
+	<head>
+		<style> 
+		#log-container { overflow: auto; height: 150px; }
+		.log-warn { color: orange; font-size : 18px; font-family : Arial;font-weight: bold;}
+		.log-error { color: red ;font-size : 18px;font-family : Arial;font-weight: bold;}
+		.log-info { color: black;font-size : 18px;font-family : Arial; font-weight: bold;}
+		.log-log { color: silver;font-size : 18px; font-family : Arial;font-weight: bold;}
+		.log-warn, .log-error { font-weight: bold; font-size : 18px;font-family : Arial;}
+		
+		h1,h2 {
+			text-align : center;
+			font-family : Arial;
+		}		
+		.text_panel {
+			font-size : 18px;
+			line-height : 1;
+			font-family : Arial;
+			width : 50%;
+			text-align : right;
+			justify-self : right;
+		}
+		
+		.line_with_input {
+			display: grid;
+			grid-template-columns: 50% 50%;
+			vertical-align: middle;
+			margin-top : -1.5em;
+		}
+		
+		.inputfields {
+			width : 10%;
+			justify-self: left; 	
+			font-size : 22 px;
+			margin-left : 1em;
+			margin-top : 1em;
+			height : 18px;			
+		}
+		.buttons {			
+			font-size : 18px;
+			font-family : Arial;
+			text-align : center;
+			width : 20%;
+			background-color : #ffffff;
+		}
+		
+		.button_position {
+			margin-left : 38%;
+		}
+		
+		#load_wrapper {
+			margin-top : 1em;
+			width : 30%;
+			height : 30px;
+			margin-left : 35%;
+			background : grey;
+		}
+		
+		#progress_bar {
+			width : 0%;
+			height: 100%;
+			background : green;
+			margin-top : 0%;
+		}
+		
+		#working {			
+			font-size : 18px;
+			font-family : Arial;
+			text-align : center;
+			margin-top : 1em;
+			
+		}
+		#tables {
+			position : relative;
+		}
+		th, td {
+			width : 70px;
+			font-family : Arial;
+			font-size : 18px;
+			text-align : center;
+		}
+		
+		#statistics {
+			position : relative;
+			float : right;
+			width : 60%;
+			background : yellow;
+			margin-right : 8%;
+		}
+		
+		#results {
+			float : left;
+			position : relative;
+			margin-left : 8%;
+			background-color : skyblue;
+			margin-bottom : 3%;
+		}
+		
+		#lastUpdated, #madeby {
+			position : relative;
+			font-family : Arial;
+			font-size : 18px;
+		}
+		#madeby {
+			float : left;
+		}		
+		#lastUpdated {
+			float : right;
+		}
+		</style>
+		
+		<title> Uppsimulator 4Story  </title>
+	</head>
+	<body>
+		<p id="madeby"> Made by raphi195 </p>
+		<p id="lastUpdated"> Last updated: 07.04.23 </p>
+		<h1> Uppsimulator 4Story </h1>
+		<div id="wrapper">
+			<div class="button_position"> 
+				<button id="4ancient" class="buttons" onclick="baseValues4ancient()"> 4ancient values </button>
+				<button id="4classic" class="buttons" onclick="baseValues4classic()"> 4classic values </button>
+			</div>
+			<div id="settings">
+			<h2> Settings Upgrade </h2>
+				<div class="line_with_input">
+					<p class="text_panel"> Start level: </p>
+					<input id="start_level" type="number" class="inputfields">
+				</div>
+				<div class="line_with_input">
+					<p class="text_panel"> Destination upgradelevel: </p>
+					<input id="end_level" type="number" class="inputfields">
+				</div>
+				<div class="line_with_input">
+					<p class="text_panel"> Bonus Event (Daily Upgrade = 30%): </p>
+					<input id="bonus" type="number" class="inputfields">
+				</div>
+				<div class="line_with_input">
+					<p class="text_panel"> Number of upgrades to minimum of endlevel: </p>
+					<input id="number_of_ups" type="number" class="inputfields">
+				</div>
+				<div class="line_with_input">
+					<p class="text_panel"> Downgrade at level: </p>
+					<input id="list_down" type="text" class="inputfields">
+				</div>
+			</div>
+			<div id="prices">
+				<h2> Prices (in silver)</h2>
+				<div class="line_with_input">
+					<p class="text_panel"> Price tincture: </p>
+					<input id="price_tinc" type="number" class="inputfields">
+				</div>
+				<div class="line_with_input">
+					<p class="text_panel"> Price formula of master: </p>
+					<input id="price_master" type="number" class="inputfields">
+				</div>
+				<div class="line_with_input">
+					<p class="text_panel"> Price potion of luck: </p>
+					<input id="price_potion" type="number" class="inputfields">
+				</div>
+			</div>
+			<div id="profit">
+				<h2> Profit (in Gold)</h2>
+				<div class="line_with_input">
+					<p class="text_panel"> +18 </p>
+					<input id="plus18" type="number" class="inputfields">
+				</div>
+				<div class="line_with_input">
+					<p class="text_panel"> +19 </p>
+					<input id="plus19" type="number" class="inputfields">
+				</div>
+				<div class="line_with_input">
+					<p class="text_panel"> +20 </p>
+					<input id="plus20" type="number" class="inputfields">
+				</div>
+				<div class="line_with_input">
+					<p class="text_panel"> +21 </p>
+					<input id="plus21" type="number" class="inputfields">
+				</div>
+				<div class="line_with_input">
+					<p class="text_panel"> +22 </p>
+					<input id="plus22" type="number" class="inputfields">
+				</div>
+				<div class="line_with_input">
+					<p class="text_panel"> +23 </p>
+					<input id="plus23" type="number" class="inputfields">
+				</div>
+				<div class="line_with_input">
+					<p class="text_panel"> +24 </p>
+					<input id="plus24" type="number" class="inputfields">
+				</div>
+			</div>
+		</div>
+		<div class="button_position">
+				<button id="start" class="buttons" onclick="mainP()"> Start  </button>
+		</div>
+		<div id="load_wrapper">
+			<div id="progress_bar"></div>
+		</div>
+		<p id="working"> 0%</p>
+		<div id="tables">
+			<table id="results">
+				<tr>
+					<th> Upgrade level </th>
+					<th> Number of items </th>
+				<tr>
+			</table>
+			<table id="statistics">
+				<tr>
+					<th> Total tincs </th>
+					<th> Tincs each </th>
+					<th> Total masters/potions </th>
+					<th> Masters/potions each </th>
+					<th> Total cost </th>
+					<th> Total profit </th>
+					<th> Cost each </th>
+					<th> Profit each </th>
+				<tr>
+			</table>
+		</div>
+		<div id="log-container">
+			<pre id="log"></pre>
+		</div>	
+	</body>
+	<script>
+		// Base upgrade rates
+var baserate = [];
+// upgrade cost
+var cost = [];
+
+function fillTable(resultArray){
+	var mytable = document.getElementById("results");
+	for (let i =1 ; i<15; i++){
+		mytable.rows[i].cells[1].innerHTML = String(resultArray[i+9]);
+	}				
+}
+
+function baseValues4classic (){
+	document.getElementById("4classic").style.backgroundColor = "#ccd8ff";
+	document.getElementById("4ancient").style.backgroundColor = "#ffffff";
+	//settings
+	document.getElementById("start_level").value = 11;
+	document.getElementById("end_level").value = 20;
+	document.getElementById("bonus").value = 0;
+	document.getElementById("number_of_ups").value = 1000;
+	document.getElementById("list_down").value = "12,14,16,18";
+	 
+	// prices
+	document.getElementById("price_tinc").value = 350;
+	document.getElementById("price_master").value = 4;
+	document.getElementById("price_potion").value = 1;
+	
+	// profit in gold 
+	document.getElementById("plus18").value = 50;
+	document.getElementById("plus19").value = 90;
+	document.getElementById("plus20").value = 50;
+	document.getElementById("plus21").value = 200;
+	document.getElementById("plus22").value = 800;
+	document.getElementById("plus23").value = 4500;
+	document.getElementById("plus24").value = 45000;
+	
+	// Base upgrade rates
+	baserate = [100,100,100,100,100,100,100,100,100,100,100,20,35,13,12,5,7,3.5,1,0.5,0.8,0.5,2];
+	
+	// upgrade cost
+	cost = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+	
+}
+function baseValues4ancient (){
+	document.getElementById("4ancient").style.backgroundColor = "#ccd8ff";
+	document.getElementById("4classic").style.backgroundColor = "#ffffff";
+	//settings
+	document.getElementById("start_level").value = 11;
+	document.getElementById("end_level").value = 20;
+	document.getElementById("bonus").value = 0;
+	document.getElementById("number_of_ups").value = 1000;
+	document.getElementById("list_down").value = "12,14";
+	
+	// prices
+	document.getElementById("price_tinc").value = 760;
+	document.getElementById("price_master").value = 120;
+	document.getElementById("price_potion").value = 22;
+	
+	// profit in gold 
+	document.getElementById("plus18").value = 50;
+	document.getElementById("plus19").value = 90;
+	document.getElementById("plus20").value = 150;
+	document.getElementById("plus21").value = 300;
+	document.getElementById("plus22").value = 1400;
+	document.getElementById("plus23").value = 4500;
+	document.getElementById("plus24").value = 45000;
+	
+	// Base upgrade rates
+	baserate = [100,100,100,100,100,100,100,91,80,50,65,15,35,9,10,7,6,3,1,1,1,1,2];
+	
+	// upgrade cost
+	cost = [0,0,0,0,0,0,0,0,0,0,0,0,5,10,20,30,60,120,500,1000,3000,6000,12000];
+	
+}
+function mainP (){		
+	// UserInput
+	start_level = document.getElementById("start_level").value;
+	end_level = document.getElementById("end_level").value;
+	bonus = document.getElementById("bonus").value;
+	numberOfUps = document.getElementById("number_of_ups").value;
+	list_down = document.getElementById("list_down").value;
+	
+	// prices
+	price_tinc = document.getElementById("price_tinc").value;
+	price_master = document.getElementById("price_master").value;
+	price_potion = document.getElementById("price_potion").value;
+	
+	// save profit in silver
+	var profitData = [];
+	for (let i = 18; i<25; i++){
+		profitData.push(document.getElementById("plus" + String(i)).value*1000);
+	}		
+	
+	//get List of downing-levels
+	const downgrade = list_down.split(',').map(Number);			
+	
+	// results / finished items
+	const results = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];			
+	
+	// statistic
+	let totalTinc = 0;
+	let totalUps = 0;
+	let totalTime = 0; // in seconds
+	let UpgradeCost = 0;
+	
+	
+	let downTime = 4;
+	let UpTime = 4;
+	
+	// Progress Baranimationstuff
+	var myprogressBar = document.getElementById("progress_bar"); 
+	var width = 1;
+	var myintervall = setInterval(drawProgress,100);
+	function drawProgress(){
+					if (width>=100){
+						clearInterval(myintervall);
+					}
+					document.getElementById("working").innerHTML = String(width) + "%";
+					myprogressBar.style.width = width + '%'; 
+					
+	}
+	
+	//main
+	for (let i = 0; i< numberOfUps; i++){
+		width = Math.floor(100/numberOfUps*i+1);
+			
+		let ItemLevel = parseInt(start_level)-1;
+		while (ItemLevel < end_level){
+			let myString = "ItemLevel: " + String(ItemLevel);
+			if (downgrade.includes(ItemLevel)){
+				ItemLevel--;			
+				continue;
+			}
+		
+			let successChance = 2*(baserate[ItemLevel-1])+(baserate[ItemLevel-1]/100*bonus);
+			let costLevel = cost[ItemLevel-1];					
+			let randomInt = Math.floor(Math.random() * 100)+1					
+			totalUps++;	
+			UpgradeCost += cost[ItemLevel];
+			
+			// Success
+			if (randomInt < successChance){
+				let master = Math.floor(Math.random() * 3)+1;
+				ItemLevel += master;
+			} else { // Failure
+				randomInt = Math.floor(Math.random() * 100)+1;
+				if  (randomInt > 55){
+					ItemLevel -= 2;
+				} else if (randomInt > 20){
+					ItemLevel -= 1;
+				} else {}
+				if (ItemLevel < 11){ ItemLevel = 11;}
+				totalTinc++;
+			}				
+		}
+		results[ItemLevel-1]++;
+	}			
+	fillTable(results);
+	
+	// fill statistic table
+	var mytable = document.getElementById("statistics");
+	var newrow = mytable.insertRow(1);
+	for (let i = 0; i<8; i++){
+		newrow.insertCell(i);
+	}
+	
+	newrow.cells[0].innerHTML = totalTinc;
+	newrow.cells[1].innerHTML = Math.floor(totalTinc/numberOfUps);
+	newrow.cells[2].innerHTML = totalUps;
+	newrow.cells[3].innerHTML = Math.floor(totalUps/numberOfUps);
+	
+	
+	// calc totalcost
+	let totalcost = totalTinc*price_tinc+totalUps*price_master+totalUps*price_potion+UpgradeCost;
+	newrow.cells[4].innerHTML = Math.floor(totalcost/1000);
+	
+	//calc totalprofit
+	var totalProfit = 0;
+	for (let i = 0; i<7; i++){
+		totalProfit += profitData[i]*results[i+17];
+	}
+	newrow.cells[5].innerHTML = Math.floor(totalProfit/1000);
+	newrow.cells[6].innerHTML = String(Math.floor(totalcost/numberOfUps/1000));
+	newrow.cells[7].innerHTML = String(Math.floor((totalProfit-totalcost)/numberOfUps/1000));			
+					
+}	
+
+
+	// Fill table with rows
+	var mytable = document.getElementById("results");
+	for (let i =1 ; i<15; i++){
+		var currentRow = mytable.insertRow(i);
+		var cell1 = currentRow.insertCell(0);
+		cell1.innerHTML = String(i+10);
+		var cell2 = currentRow.insertCell(1);
+	}	
+
+baseValues4ancient();
+		</script>			
+</html> 
