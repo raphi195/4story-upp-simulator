@@ -1,13 +1,6 @@
 <html>
 	<head>
-		<style> 
-		#log-container { overflow: auto; height: 150px; }
-		.log-warn { color: orange; font-size : 18px; font-family : Arial;font-weight: bold;}
-		.log-error { color: red ;font-size : 18px;font-family : Arial;font-weight: bold;}
-		.log-info { color: black;font-size : 18px;font-family : Arial; font-weight: bold;}
-		.log-log { color: silver;font-size : 18px; font-family : Arial;font-weight: bold;}
-		.log-warn, .log-error { font-weight: bold; font-size : 18px;font-family : Arial;}
-		
+		<style> 		
 		h1,h2 {
 			text-align : center;
 			font-family : Arial;
@@ -29,7 +22,7 @@
 		}
 		
 		.inputfields {
-			width : 10%;
+			width : 15%;
 			justify-self: left; 	
 			font-size : 22 px;
 			margin-left : 1em;
@@ -47,6 +40,11 @@
 		.button_position {
 			margin-left : 38%;
 		}
+		
+		#start {
+			margin-left : 10%;
+		}
+		
 		
 		#load_wrapper {
 			margin-top : 1em;
@@ -113,7 +111,7 @@
 	</head>
 	<body>
 		<p id="madeby"> Made by raphi195 </p>
-		<p id="lastUpdated"> Last updated: 07.04.23 </p>
+		<p id="lastUpdated"> Last updated: 08.04.23 </p>
 		<h1> Uppsimulator 4Story </h1>
 		<div id="wrapper">
 			<div class="button_position"> 
@@ -131,7 +129,7 @@
 					<input id="end_level" type="number" class="inputfields">
 				</div>
 				<div class="line_with_input">
-					<p class="text_panel"> Bonus Event (Daily Upgrade = 30%): </p>
+					<p class="text_panel"> Bonus Event (in %): </p>
 					<input id="bonus" type="number" class="inputfields">
 				</div>
 				<div class="line_with_input">
@@ -156,6 +154,22 @@
 				<div class="line_with_input">
 					<p class="text_panel"> Price potion of luck: </p>
 					<input id="price_potion" type="number" class="inputfields">
+				</div>
+				<div class="line_with_input">
+					<p class="text_panel"> Price potion of luck 150%: </p>
+					<input id="price_potion150" type="number" class="inputfields">
+				</div>
+				<div class="line_with_input">
+					<p class="text_panel"> Use Potion 150% at level: </p>
+					<input id="list_potion150" type="text" class="inputfields">
+				</div>
+				<div class="line_with_input">
+					<p class="text_panel"> Price potion of luck 200%: </p>
+					<input id="price_potion200" type="number" class="inputfields">
+				</div>
+				<div class="line_with_input">
+					<p class="text_panel"> Use Potion 200% at level: </p>
+					<input id="list_potion200" type="text" class="inputfields">
 				</div>
 			</div>
 			<div id="profit">
@@ -226,6 +240,9 @@
 var baserate = [];
 // upgrade cost
 var cost = [];
+// Lists for big luck potion
+var potion150 = "";
+var potion200 = "";
 
 function fillTable(resultArray){
 	var mytable = document.getElementById("results");
@@ -248,6 +265,10 @@ function baseValues4classic (){
 	document.getElementById("price_tinc").value = 350;
 	document.getElementById("price_master").value = 4;
 	document.getElementById("price_potion").value = 1;
+	document.getElementById("price_potion150").value = 2300;
+	document.getElementById("price_potion200").value = 15000;
+	document.getElementById("list_potion150").value = "19,20";
+	document.getElementById("list_potion200").value = "21";
 	
 	// profit in gold 
 	document.getElementById("plus18").value = 50;
@@ -257,6 +278,8 @@ function baseValues4classic (){
 	document.getElementById("plus22").value = 800;
 	document.getElementById("plus23").value = 4500;
 	document.getElementById("plus24").value = 45000;
+	
+	
 	
 	// Base upgrade rates
 	baserate = [100,100,100,100,100,100,100,100,100,100,100,20,35,13,12,5,7,3.5,1,0.5,0.8,0.5,2];
@@ -279,6 +302,10 @@ function baseValues4ancient (){
 	document.getElementById("price_tinc").value = 760;
 	document.getElementById("price_master").value = 120;
 	document.getElementById("price_potion").value = 22;
+	document.getElementById("price_potion150").value = 0;
+	document.getElementById("price_potion200").value = 0;
+	document.getElementById("list_potion150").value = "18,19,20";
+	document.getElementById("list_potion200").value = "21,22,23";
 	
 	// profit in gold 
 	document.getElementById("plus18").value = 50;
@@ -308,6 +335,8 @@ function mainP (){
 	price_tinc = document.getElementById("price_tinc").value;
 	price_master = document.getElementById("price_master").value;
 	price_potion = document.getElementById("price_potion").value;
+	price_potion150 = document.getElementById("price_potion150").value;
+	price_potion200 = document.getElementById("price_potion200").value;
 	
 	// save profit in silver
 	var profitData = [];
@@ -316,7 +345,11 @@ function mainP (){
 	}		
 	
 	//get List of downing-levels
-	const downgrade = list_down.split(',').map(Number);			
+	const downgrade = list_down.split(',').map(Number);
+
+	// get List of bonus potion
+	list_potion150 = document.getElementById("list_potion150").value.split(',').map(Number);
+	list_potion200 = document.getElementById("list_potion200").value.split(',').map(Number);
 	
 	// results / finished items
 	const results = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];			
@@ -355,8 +388,22 @@ function mainP (){
 				ItemLevel--;			
 				continue;
 			}
-		
-			let successChance = 2*(baserate[ItemLevel-1])+(baserate[ItemLevel-1]/100*bonus);
+			
+			// Choose potion 100/150/200%
+			var factor = 2;
+			if (list_potion150.includes(ItemLevel) && list_potion200.includes(ItemLevel)){
+				return alert("Choose only one potion (150% OR 200%) for each level.");
+			} else if (list_potion150.includes(ItemLevel)) {
+				factor = 2.5;
+				UpgradeCost+= price_potion150-price_potion;
+			} 
+			else if (list_potion200.includes(ItemLevel)){ 
+				factor = 3;
+				UpgradeCost+=price_potion200-price_potion;
+			}
+			
+			// Calculate rate and basic cost
+			let successChance = factor*(baserate[ItemLevel-1]+(baserate[ItemLevel-1]/100*bonus));
 			let costLevel = cost[ItemLevel-1];					
 			let randomInt = Math.floor(Math.random() * 100)+1					
 			totalUps++;	
